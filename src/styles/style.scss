@@ -1,0 +1,22 @@
+body {
+  margin: 0;
+}
+
+html {
+  margin: 0;
+  font-family: 'Roboto', sans-serif !important;
+}
+
+.wrapper {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0 10px;
+}
