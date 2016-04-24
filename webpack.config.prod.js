@@ -1,11 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
-
-const baseConfig = require('./base');
-const defaultSettings = require('./defaults');
+const baseConfig = require('./webpack.config.base');
 
 const config = Object.assign({}, baseConfig, {
-  entry: path.join(__dirname, '../src/index'),
+  entry: path.join(__dirname, 'src', 'index'),
   cache: false,
   devtool: 'sourcemap',
   plugins: [
@@ -21,15 +19,14 @@ const config = Object.assign({}, baseConfig, {
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.NoErrorsPlugin()
-  ],
-  module: defaultSettings.getDefaultModules()
+  ]
 });
 
 // Add needed loaders to the defaults here
 config.module.loaders.push({
   test: /\.(js|jsx)$/,
   loader: 'babel',
-  include: [...config.additionalPaths, path.join(__dirname, '/../src')]
+  include: [...config.additionalPaths, path.join(__dirname, 'src')]
 });
 
 module.exports = config;

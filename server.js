@@ -3,61 +3,43 @@ const mongoose = require('mongoose');
 const express = require('express');
 const api = require('./server/api');
 const app = express();
+const webpack = require('webpack');
+const open = require('open');
+const PROD = process.env.NODE_ENV === 'production';
 
-const PROD = process.env.NODE_ENV === "production";
-
-function startDevAppServer() {
-  const webpack = require('webpack');
+// In in development start a webpack-dev-server to server our Frontend
+if (!PROD) {
   const WebpackDevServer = require('webpack-dev-server');
-  const config = require('./webpack.config');
-  new WebpackDevServer(webpack(config), config.devServer)
-  .listen(config.port, 'localhost', (err) => {
-    if (err) {
-      console.log(err);
-    }
+  const config = require('./webpack.config.dev');
+  const server = new WebpackDevServer(webpack(config), config.devServer);
+  server.listen(config.port, 'localhost', () => {
     console.log(`Listening at localhost: ${config.port}`);
     console.log('Opening your system browser...');
-    // open(`http://localhost:${config.port}/webpack-dev-server/`);
+    open(`http://localhost:${config.port}/webpack-dev-server/`);
   });
-
-  // return new Promise((resolve, reject) => {
-  //   const server = new WebpackDevServer(compiler, {
-  //     hot: true,
-  //     historyApiFallback: true,
-  //     noInfo: false,
-  //     publicPath: config.output.publicPath,
-  //     port
-  //   });
-  //   server.listen(port, 'localhost', (err) => {
-  //     if (err) reject(err);
-  //     else {
-  //       resolve(port);
-  //     }
-  //   });
-  // });
 }
 
-startDevAppServer();
+// Our API route
+app.use('/api', api);
 
+// If in production server our React SPA from dist folder
+if (PROD) {
+  app.use(express.static('dist'));
+  app.get('*', (req, res) => {
+    res.sendFile(require('./dist/index.html'));
+  });
+}
 
-// // Our API route
-// app.use('/api', api);
-//
-// app.get('/', (req, res) => {
-//   res.send('Hello World');
-// });
-//
-// const mongodbURI = `mongodb://${process.env.DB_URI || 'localhost'}/${process.env.DB_NAME || 'REM'}`;
-// const port = process.env.PORT || 3000;
-// mongoose.connect(mongodbURI)
-//   .then(() => {
-//     app.listen(port, (err) => {
-//       if (err) console.error(err);
-//       else {
-//         console.info(`Open up http://localhost:${port}/ in your browser`);
-//       }
-//     });
-//   })
-//   .catch(err => {throw err;});
-
-// clientServer.listen(port + 1, 'localhost');
+// Connect to our MongoDB database, Once connect start our server.
+const mongodbURI = `mongodb://${process.env.DB_URI || 'localhost'}/${process.env.DB_NAME || 'REM'}`;
+const port = process.env.PORT || 8000;
+return mongoose.connect(mongodbURI)
+  .then(() => {
+    app.listen(port, (err) => {
+      if (err) console.error(err);
+      else {
+        console.info(`Open up http://localhost:${port}/ in your browser`);
+      }
+    });
+  })
+  .catch(err => {throw err;});
