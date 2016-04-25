@@ -19,8 +19,8 @@ export default function () {
   return (
     <div className="header">
       <div className="brand">
-        <img src={require('../images/corgi.svg')} alt="" className="logo" />
-        <span>React + Redux + React-Router</span>
+        <img src={require('../images/logo3.svg')} alt="" className="logo" />
+        <span>A React + Express + MongoDB Starter Kit</span>
       </div>
       <li className="nav">{headerLinks()}</li>
     </div>
