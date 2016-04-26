@@ -1,13 +1,12 @@
 import { connect } from 'react-redux';
-import { addItem, removeItem, editItem, deleteAll } from 'actions';
+import { getList, addItem, removeItem, editItem, deleteAll } from 'actions';
 import List from 'components/list';
-
 
 function mapPropsToState(state) {
   return {
-    name: state.name,
-    list: state.list
+    list: state.list,
+    name: state.name
   };
 }
 
-export default connect(mapPropsToState, { addItem, removeItem, editItem, deleteAll })(List);
+export default connect(mapPropsToState, { getList, addItem, removeItem, deleteAll})(List);

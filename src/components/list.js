@@ -1,60 +1,59 @@
 import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
-import { uniqueId } from 'lodash';
-
+require('styles/list.scss');
 
 class List extends Component {
 
   static propTypes = {
-    name: PropTypes.string,
     list: PropTypes.array,
-    addItem: PropTypes.function
+    getList: PropTypes.func,
+    addItem: PropTypes.func,
+    removeItem: PropTypes.func,
+    deleteAll: PropTypes.func
   }
 
   constructor(props) {
     super(props);
+    this.state = {
+      list: [],
+      description: ''
+    };
+    this.onInputChange = this.onInputChange.bind(this);
+    this.onSubmitForm = this.onSubmitForm.bind(this);
   }
 
   componentWillMount() {
-    if (this.props.name && this.props.list.length === 0) {
-      const list = [
-        'Create a new list',
-        'Play Stardew Vally',
-        'Watch Star Wars VII (Again)'
-      ];
-      for (const action of list) {
-        this.props.addItem({
-          id: uniqueId(),
-          content: action
-        });
-      }
-    }
+    this.props.getList();
+  }
+  onSubmitForm(e) {
+    e.preventDefault();
+    this.props.addItem({ description: this.state.description });
+    this.setState({
+      description: ''
+    });
   }
 
-  renderList() {
+  onInputChange(e) {
+    this.setState({description: e.target.value});
+  }
+
+  showList() {
     return this.props.list.map((item) => (
-      <ul key={item.id}>
-        <div>{item.content}</div>
-        <div> Delete </div>
-        <div> Edit </div>
-      </ul>
+      <li key={item._id} className="list-group-item">
+        <div>{item.description}</div>
+        <div onClick={() => this.props.removeItem(item._id)}> &#10060; </div>
+      </li>
     ));
   }
 
   render() {
-    if (!this.props.name) {
-      return (
-        <div>
-          Please Navigate to <Link to="/">Set Name</Link>  first and tell me what your name is
-        </div>
-      );
-    }
     return (
-      <div>
-        <h2>Hello {this.props.name} here is a list of TODO</h2>
-        <li>
-          {this.renderList()}
-        </li>
+      <div className="todo-list">
+        <form onSubmit={this.onSubmitForm}>
+          <input type="text" placeholder="Add to list" value={this.state.description} onChange={this.onInputChange} />
+        </form>
+        <ul className="list-group">
+          {this.showList()}
+        </ul>
       </div>
     );
   }

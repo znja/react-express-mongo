@@ -16,10 +16,16 @@
     margin-left: 20px;
     order: 1;
     cursor: pointer;
+    img {
+      height: 100px;
+      padding: 10px 0px;
+    }
     span {
       margin-left: 10px;
       align-self: flex-end;
       padding-bottom: 10px;
+      padding-bottom: 40px;
+      color: #F5F5F5;
     }
   }
 
@@ -37,7 +43,8 @@
         display: block;
         padding: 1em;
         color: white;
-        line-height: 50px;
+        line-height: 100px;
+        border-bottom: 1px solid deepskyblue;
       }
        a:hover {
         background: darken(deepskyblue, 2%);

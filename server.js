@@ -4,7 +4,6 @@ const express = require('express');
 const api = require('./server/api');
 const app = express();
 const webpack = require('webpack');
-const open = require('open');
 const PROD = process.env.NODE_ENV === 'production';
 
 // In in development start a webpack-dev-server to server our Frontend
@@ -15,7 +14,6 @@ if (!PROD) {
   server.listen(config.port, 'localhost', () => {
     console.log(`Listening at localhost: ${config.port}`);
     console.log('Opening your system browser...');
-    open(`http://localhost:${config.port}/webpack-dev-server/`);
   });
 }
 
@@ -37,9 +35,6 @@ return mongoose.connect(mongodbURI)
   .then(() => {
     app.listen(port, (err) => {
       if (err) console.error(err);
-      else {
-        console.info(`Open up http://localhost:${port}/ in your browser`);
-      }
     });
   })
   .catch(err => {throw err;});
