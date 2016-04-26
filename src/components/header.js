@@ -5,7 +5,7 @@ require('styles/header.scss');
 
 export default function () {
   const links = [
-    {path: '/', displayText: 'Set Name'}
+    {path: '/list', displayText: 'Todo List'}
   ];
 
   function headerLinks() {
